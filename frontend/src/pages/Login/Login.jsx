@@ -23,7 +23,7 @@ const Login = () => {
       setError("Please enter a password");
       return;
     }
-    
+
     setError("");
   };
   
@@ -35,7 +35,7 @@ const Login = () => {
         <div className="w-96 border rounded bg-white px-7 py-10">
           
           <form onSubmit={handleLogin}>
-            <h2 className="text-2xl mb-7">Login</h2>
+            <h4 className="text-2xl mb-7">Login</h4>
             
             {/* email */}
             <input 
