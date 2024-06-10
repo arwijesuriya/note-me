@@ -125,6 +125,27 @@ app.post("/login", async (req, res) => {
     }
 });
 
+// get user credentials
+app.post("/login", async (req, res) => {
+    const { user } = req.user;
+
+    const isUser = await User.findOne({ _id: user.id });
+
+    if (!isUser) {
+        return res.sendStatus(401);
+    }
+
+    return res.json({
+        user: {
+            fullName: isUser.fullName,
+            email: isUser.email,
+            _id: isUser.id,
+            createdOn: isUser.createdOn,
+        },
+        message: "",
+    });
+});
+
 // add note
 app.post("/add-note", authenticateToken, async (req, res) => {
     const { title, content, tags } = req.body;
@@ -253,6 +274,40 @@ app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
         return res.json({
             error: false,
             message: "Note deleted successfully",
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            error: true,
+            message: "Something went wrong",
+        });
+    }
+});
+
+// update isPinned
+app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
+    const noteId = req.params.noteId;
+    const { isPinned } = req.body;
+    const { user } = req.user;
+
+    try {
+        const note = await Note.findOne({ _id: noteId, userId: user._id });
+        
+        if (!isPinned) {
+            return res.status(400).json({
+                error: true,
+                message: "No changes were made",
+            });
+        }
+
+        note.isPinned = isPinned;
+
+        await note.save();
+
+        return res.json({
+            error: false,
+            note,
+            message: "Note pinned",
         });
     }
     catch (error) {
