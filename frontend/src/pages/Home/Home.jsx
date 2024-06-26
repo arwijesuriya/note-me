@@ -98,7 +98,7 @@ const Home = () => {
           console.log("Something went wrong");
         }
     }
-};
+  };
 
   useEffect(() => {
     getAllNotes();
