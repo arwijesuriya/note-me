@@ -47,11 +47,11 @@ const Home = () => {
     }
     catch (error) {
       console.log("Something went wrong");
-      }
     }
-  };
+  }
 
   useEffect(() => {
+    getAllNotes();
     getUserInfo();
     return () => {};
   }, []);
@@ -62,16 +62,19 @@ const Home = () => {
 
       <div className="container p-4 mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
-          <NoteCard 
-            title="abc" 
-            date="75.12" 
-            content="content"
-            tags="tags"
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
+          {allNotes.map((item, index) => (
+            <NoteCard 
+              key={item._id}
+              title={item.title} 
+              date={item.createdOn} 
+              content={item.content}
+              tags={item.tags}
+              isPinned={item.isPinned}
+              onEdit={() => {}}
+              onDelete={() => {}}
+              onPinNote={() => {}}
+            />
+          ))}
         </div>
       </div>
 
